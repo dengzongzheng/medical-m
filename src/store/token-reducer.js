@@ -17,11 +17,8 @@ export default (state, action) => {
             return ({
                 accessToken:action.value
             });
-            // return state ;
         case GET_ACCESS_TOKEN:
-            state.accessToken="dzz"+state.count;
-            state.count = state.count-1;
-            return state;
+            return state.accessToken;
         default:
             return state;
     }

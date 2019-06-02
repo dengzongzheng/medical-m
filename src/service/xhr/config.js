@@ -1,3 +1,3 @@
-export const rootPath = 'http://api.zhencangys.com';
+export const rootPath = 'http://127.0.0.1:9080';
 
-export const imgPath = 'http://img.zhencangys.com/';
+export const imgPath = 'http://img.sswjjd.cn/';
