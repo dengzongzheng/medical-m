@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import './News.css'
+import './NewsDetail.css'
 import {imgPath} from "@/service/xhr/config";
 import {title} from '@/constant/index';
 import xhr from '@/service/xhr/index';
@@ -43,8 +43,14 @@ export default class NewsDetail extends Component {
     }
 
     render(){
-        return(<div>
-            详情页asdfasdfasdf
-        </div>)
+        return(
+            <div className={"detail-container"}>
+                <div className={"news-detail-title"}>{this.state.news.title}</div>
+                <div className={"news-detail-content"}>
+                    <div className={"detail-text-input-box"}
+                         dangerouslySetInnerHTML={{__html: this.state.news.textData}}/>
+                </div>
+            </div>
+        )
     }
 }

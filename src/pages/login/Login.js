@@ -3,6 +3,9 @@ import './Login.css'
 import {imgPath} from "@/service/xhr/config";
 import {title} from '@/constant/index';
 import xhr from '@/service/xhr/index';
+import {
+    Link
+} from 'react-router-dom';
 import { List, InputItem, WhiteSpace,Button } from 'antd-mobile';
 
 export default class Login extends Component {
@@ -35,7 +38,7 @@ export default class Login extends Component {
                     <div className="no-register-box">
                         <WhiteSpace size={"lg"}/>
                         <div className="no-account">还没有账号？</div>
-                        <div className="to-register">立即注册</div>
+                        <div className="to-register"><Link to={"/register"}>立即注册</Link></div>
                     </div>
                 </div>
         )

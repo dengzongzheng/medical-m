@@ -27,6 +27,8 @@
     display: inline-block;
 }
 
-.to-register a{
+.to-register a {
     text-decoration: none;
+    color: #4498EA;
+    cursor: pointer;
 }

@@ -3,6 +3,7 @@ import './Register.css'
 import {imgPath} from "@/service/xhr/config";
 import {title} from '@/constant/index';
 import xhr from '@/service/xhr/index';
+import {InputItem} from "antd-mobile";
 
 export default class Register extends Component {
     constructor(props) {
