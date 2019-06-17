@@ -11,7 +11,9 @@ import { List, InputItem, WhiteSpace,Button } from 'antd-mobile';
 export default class Supervise extends Component {
     constructor(props) {
         super(props);
+        this.state={
 
+        }
     }
 
     render(){
