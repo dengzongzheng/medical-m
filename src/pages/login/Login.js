@@ -2,7 +2,6 @@ import React,{ Component } from 'react';
 import './Login.css'
 import {imgPath} from "@/service/xhr/config";
 import {title} from '@/constant/index';
-import xhr from '@/service/xhr/index';
 import {
     Link
 } from 'react-router-dom';
