@@ -4,6 +4,7 @@ import { Card, WhiteSpace,ListView,PullToRefresh ,Result} from 'antd-mobile';
 import {imgPath} from "@/service/xhr/config";
 import {title} from '@/constant/index';
 import xhr from '@/service/xhr/index';
+import queryString from "query-string";
 
 export default class News extends Component {
     constructor(props) {
@@ -66,6 +67,21 @@ export default class News extends Component {
                 </div>
             </div>
         )
+    }
+
+    componentWillMount() {
+        let urlParams = queryString.parse(this.props.location.search);
+        let category = "";
+        if (urlParams!==undefined) {
+            category = urlParams.category;
+        }
+        if ("" !== category) {
+            let param = this.state.param;
+            param["category"] = category;
+            this.setState(state => ({
+                param: param
+            }));
+        }
     }
 
     componentDidMount() {

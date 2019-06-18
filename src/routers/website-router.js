@@ -16,7 +16,7 @@ const routers = [
     },
     {
         path:'/news',
-        exact:true,
+        exact: true,
         component: lazyLoad(News)
     },
     {
