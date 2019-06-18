@@ -12,6 +12,9 @@ module.exports = merge(base, {
         port: 3000
     },
     plugins:[
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            api_env:"'development'"
+        })
     ]
 });
