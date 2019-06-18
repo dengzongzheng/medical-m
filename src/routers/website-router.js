@@ -5,7 +5,6 @@ import News from 'bundle-loader?lazy&name=websiteIndex!@pages/info/News';
 import NewsDetail from 'bundle-loader?lazy&name=websiteIndex!@pages/info/NewsDetail';
 import Login from 'bundle-loader?lazy&name=Login!@pages/login/Login';
 import Register from 'bundle-loader?lazy&name=Register!@pages/register/Register';
-import Supervise from 'bundle-loader?lazy&name=Register!@pages/supervise/Supervise';
 import About from 'bundle-loader?lazy&name=Register!@pages/about/About';
 
 const routers = [
@@ -33,11 +32,6 @@ const routers = [
         path:'/register',
         exact:true,
         component: lazyLoad(Register)
-    },
-    {
-        path:'/supervise',
-        exact:true,
-        component: lazyLoad(Supervise)
     },
     {
         path:'/aboutUs',

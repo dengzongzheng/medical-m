@@ -9,8 +9,10 @@ import { List, InputItem, WhiteSpace,Button } from 'antd-mobile';
 import xhr from '@/service/xhr/index';
 import Validate from "@/util/Validate";
 import Util from "@/util/Util";
+import {connect} from "react-redux";
+import * as Action from "@/store/token-action";
 
-export default class Login extends Component {
+class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -38,18 +40,18 @@ export default class Login extends Component {
 
         const name = event.target.name;
         const value = event.target.value;
-        this.validateLogin(name, value);
+        console.log(value);
         let param = this.state.param;
         param[name] = value;
         this.setState(state => ({
             param: param
         }));
-
+        this.validateLogin(name, value);
     }
 
     validateAll() {
-
-        if (!this.validateLogin("userName", this.state.param.use)) {
+        console.log(this.state.param);
+        if (!this.validateLogin("userName", this.state.param.userName)) {
             return false;
         }
 
@@ -66,10 +68,12 @@ export default class Login extends Component {
             return;
         }
         const that  = this;
-        xhr.post('/api/websiteLogin',{},true).then(function (data) {
+        xhr.post('/api/websiteLogin',this.state.param,true).then(function (data) {
             console.log(data);
             if(data.code==="1"){
-
+                that.props.setAccessToken({value:data.data});
+                console.log(that.props.data.accessToken);
+                that.props.history.push('/supervise');
             }else{
                 Util.showToast(data.message);
             }
@@ -84,11 +88,14 @@ export default class Login extends Component {
                 <WhiteSpace/>
                 <InputItem
                     placeholder="用户名"
+                    name={"userName"}
                     onBlur={()=>this.inputOnblur(event)}
                 />
                 <WhiteSpace/>
                 <InputItem
                     type={"password"}
+                    name={"password"}
+                    onBlur={()=>this.inputOnblur(event)}
                     placeholder="密码"
                 />
 
@@ -108,3 +115,9 @@ export default class Login extends Component {
         );
     }
 };
+
+const mapStateToProps = state => ({
+    data: state
+});
+
+export default connect(mapStateToProps,Action)(Login);

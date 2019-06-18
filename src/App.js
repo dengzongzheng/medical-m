@@ -17,6 +17,7 @@ import * as Action from "@/store/token-action";
 import { connect } from "react-redux";
 import {Drawer, Icon, NavBar} from "antd-mobile";
 import {title} from '@/constant/index';
+import Supervise from '@pages/supervise/Supervise';
 
 class App extends Component {
 
@@ -53,6 +54,7 @@ class App extends Component {
         return (
                 <div className="App">
                     <BrowserRouter history={hashHistory}>
+                        <Route path="/supervise" component={props => this.requireAuth(Supervise,props)} />
                         {
                             routers.map((route,index) => {
                                 return(

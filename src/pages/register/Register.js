@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
 import './Register.css'
 import {imgPath} from "@/service/xhr/config";
-import {title} from '@/constant/index';
+import {title,organizations} from '@/constant/index';
 import xhr from '@/service/xhr/index';
 import {InputItem} from "antd-mobile";
 import Validate from "@/util/Validate";
@@ -35,6 +35,9 @@ export default class Register extends Component {
 
                 ]
             },
+            selectOrganization:[
+
+            ],
             industry:{
                 code:"",
                 name:""
@@ -101,6 +104,16 @@ export default class Register extends Component {
         });
     }
 
+    handleCheckboxChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
+    }
+
     validateAll(){
 
         if (!this.validateInputData("userName", this.state.param.userName)) {
@@ -151,6 +164,13 @@ export default class Register extends Component {
     }
 
     render(){
+        let organizationsDiv = organizations.map((item,index) => (
+            <div className="check" key={item.organization_code}>
+                <input type="checkbox" value={item.organization_code}/>
+                <span className="check-name">{item.organization_name}</span>
+            </div>
+        ));
+
         return (
             <div className="container">
                 <header className="header">注册</header>
@@ -178,26 +198,7 @@ export default class Register extends Component {
 
                     <div className="input-box-2">
                         <label className="title">类别</label>
-                        <div className="check">
-                            <input type="checkbox" value="1" checked hidden/>
-                            <label className="check-self"></label>
-                            <span className="check-name">学校卫生</span>
-                        </div>
-                        <div className="check">
-                            <input type="checkbox" value="1" checked hidden/>
-                            <label className="check-self"></label>
-                            <span className="check-name">医疗机构</span>
-                        </div>
-                        <div className="check">
-                            <input type="checkbox" value="1" checked hidden/>
-                            <label className="check-self"></label>
-                            <span className="check-name">供水单位</span>
-                        </div>
-                        <div className="check">
-                            <input type="checkbox" value="1" checked hidden/>
-                            <label className="check-self"></label>
-                            <span className="check-name">监督协管</span>
-                        </div>
+                        {organizationsDiv}
                     </div>
 
                     <div className="input-box-2">
