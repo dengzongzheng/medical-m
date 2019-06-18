@@ -75,7 +75,7 @@ export default class News extends Component {
         if (urlParams!==undefined) {
             category = urlParams.category;
         }
-        if ("" !== category) {
+        if ("" !== category && "undefined" !==category && undefined !== category ) {
             let param = this.state.param;
             param["category"] = category;
             this.setState(state => ({
