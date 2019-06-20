@@ -28,18 +28,11 @@ export default class Register extends Component {
                 managerName:"",
                 managerMobile:""
             },
-            organization:{
-                organizationCode:"",
-                organizationName:"",
-                industries:[
-
-                ]
-            },
             organizations:[
                 {
-                    "organization_name": "公共机构",
-                    "organization_code": 1,
-                    "select":true,
+                    "organizationName": "公共机构",
+                    "organizationCode": 1,
+                    "select":false,
                     "industries": [
                         {
                             "code": 1,
@@ -69,15 +62,15 @@ export default class Register extends Component {
                     ]
                 },
                 {
-                    "organization_code": 2,
+                    "organizationCode": 2,
                     "select":false,
-                    "organization_name": "学校",
+                    "organizationName": "学校",
                     "industries": [],
                 },
                 {
-                    "organization_code": 3,
+                    "organizationCode": 3,
                     "select":false,
-                    "organization_name": "医疗机构",
+                    "organizationName": "医疗机构",
                     "industries": [
                         {
                             "code": 1,
@@ -97,15 +90,15 @@ export default class Register extends Component {
                     ]
                 },
                 {
-                    "organization_code": 4,
+                    "organizationCode": 4,
                     "select":false,
-                    "organization_name": "供水单位",
+                    "organizationName": "供水单位",
                     "industries": []
                 },
                 {
-                    "organization_code": 5,
+                    "organizationCode": 5,
                     "select":false,
-                    "organization_name": "监督协管",
+                    "organizationName": "监督协管",
                     "industries": []
                 }
             ],
@@ -135,7 +128,14 @@ export default class Register extends Component {
             return true;
         }
         if (name === "organizations") {
-            if (this.state.param.organizations.length === 0) {
+            let flag = false;
+            for (let i = 0; i < this.state.organizations.length; i++) {
+                if (this.state.organizations[i].select) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
                 Util.showToast("请选择分类及行业");
                 return false;
             }
@@ -181,23 +181,35 @@ export default class Register extends Component {
         const name = target.name;
         const code = target.value;
         const industry = target.industry;
-        console.log(industry);
         let organizations = this.state.organizations;
         if ("organization" === name) {
             for (let i = 0; i < organizations.length; i++) {
-                if (organizations[i].organization_code+"" === code) {
+                if (organizations[i].organizationCode+"" === code) {
                     organizations[i].select = value;
                     break;
                 }
             }
         }
-        if ("industries" === name) {
-            // for (let i = 0; i < organizations.length; i++) {
-            //     if (organizations[i].organization_code+"" === code) {
-            //         organizations[i].select = value;
-            //         break;
-            //     }
-            // }
+        this.setState(state => ({
+            organizations: organizations
+        }));
+    }
+
+    handleIndustryChange(event, organization_code) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const code = target.value;
+        let organizations = this.state.organizations;
+        for (let i = 0; i < organizations.length; i++) {
+            if (organizations[i].organizationCode === organization_code) {
+                for (let j = 0; j < organizations[i].industries.length; j++) {
+                    if (organizations[i].industries[j].code+"" === code) {
+                        organizations[i].industries[j].select = value;
+                        break;
+                    }
+                }
+                break;
+            }
         }
         this.setState(state => ({
             organizations: organizations
@@ -239,13 +251,14 @@ export default class Register extends Component {
         }
         const that = this;
         let param = this.state.param;
+        param["organizations"] = this.state.organizations;
         xhr.post('/api/websiteRegister',param,true).then(function (data) {
             console.log(data);
             if(data.code==="1"){
                 Util.alertUtil("提示","注册成功","关闭","确认",function () {
-                    that.props.location.replace = "/login";
+                    that.props.history.push('/login');
                 },function () {
-                    that.props.location.replace = "/login";
+                    that.props.history.push('/login');
                 })
             }else{
                 Util.showToast(data.message);
@@ -255,15 +268,16 @@ export default class Register extends Component {
 
     render(){
         let organizationsDiv = this.state.organizations.map((item,index) => (
-            <div className="check" key={item.organization_name}>
-                <input type="checkbox" value={item.organization_code}
-                       id={item.organization_code+"organization"}
+            <div className="check" key={item.organizationName}>
+                <input type="checkbox"
+                       value={item.organizationCode}
+                       id={item.organizationCode+"organization"}
                        onChange={(event)=>this.handleCheckboxChange(event)}
                        name={"organization"}
                        checked={item.select}/>
                 <label className="check-name"
-                      htmlFor={item.organization_code+"organization"}>
-                        {item.organization_name}
+                      htmlFor={item.organizationCode+"organization"}>
+                        {item.organizationName}
                 </label>
             </div>
         ));
@@ -273,10 +287,11 @@ export default class Register extends Component {
             if (item.select) {
                 item.industries.map((item2,index2)=>{
                    industriesDiv.push(
-                       <div className="check" key={item2.organization_name}>
-                           <input type="checkbox" value={item2.code}
+                       <div className="check" key={item2.name}>
+                           <input type="checkbox"
+                                  value={item2.code}
                                   id={item2.code+"industries"}
-                                  onChange={(event)=>this.handleCheckboxChange(event)}
+                                  onChange={(event)=>this.handleIndustryChange(event,item.organizationCode)}
                                   name={"industries"}
                                   industry={"adad"}
                                   checked={item2.select}/>
@@ -326,40 +341,6 @@ export default class Register extends Component {
                         {organizationsDiv}
                     </div>
 
-                    {/*<div className="input-box-2">*/}
-                        {/*<label className="title">行业</label>*/}
-                        {/*/!*<div className="check">*!/*/}
-                            {/*/!*<input type="checkbox" value="1" checked hidden/>*!/*/}
-                            {/*/!*<label className="check-self"></label>*!/*/}
-                            {/*/!*<span className="check-name">学校卫生</span>*!/*/}
-                        {/*/!*</div>*!/*/}
-                        {/*/!*<div className="check">*!/*/}
-                            {/*/!*<input type="checkbox" value="1" checked hidden/>*!/*/}
-                            {/*/!*<label className="check-self"></label>*!/*/}
-                            {/*/!*<span className="check-name">医疗机构</span>*!/*/}
-                        {/*/!*</div>*!/*/}
-                        {/*/!*<div className="check">*!/*/}
-                            {/*/!*<input type="checkbox" value="1" checked hidden/>*!/*/}
-                            {/*/!*<label className="check-self"></label>*!/*/}
-                            {/*/!*<span className="check-name">供水单位</span>*!/*/}
-                        {/*/!*</div>*!/*/}
-                        {/*/!*<div className="check">*!/*/}
-                            {/*/!*<input type="checkbox" value="1" checked hidden/>*!/*/}
-                            {/*/!*<label className="check-self"></label>*!/*/}
-                            {/*/!*<span className="check-name">监督协管</span>*!/*/}
-                        {/*/!*</div>*!/*/}
-                        {/*/!*<div className="check">*!/*/}
-                            {/*/!*<input type="checkbox" value="1" checked hidden/>*!/*/}
-                            {/*/!*<label className="check-self"></label>*!/*/}
-                            {/*/!*<span className="check-name">监督协管</span>*!/*/}
-                        {/*/!*</div>*!/*/}
-                        {/*/!*<div className="check">*!/*/}
-                            {/*/!*<input type="checkbox" value="1" checked hidden/>*!/*/}
-                            {/*/!*<label className="check-self"></label>*!/*/}
-                            {/*/!*<span className="check-name">监督协管</span>*!/*/}
-                        {/*/!*</div>*!/*/}
-                        {/*{industriesDiv}*/}
-                    {/*</div>*/}
                     {industries}
 
                     <div className="input-box">
