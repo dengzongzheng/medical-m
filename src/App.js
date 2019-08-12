@@ -19,6 +19,7 @@ import {Drawer, Icon, NavBar} from "antd-mobile";
 import {title} from '@/constant/index';
 import Supervise from '@pages/supervise/Supervise';
 
+
 class App extends Component {
 
     constructor(props){
@@ -37,7 +38,7 @@ class App extends Component {
 
     requireAuth(Layout, props) {
         let flag = ""===this.props.data.accessToken;
-        if (flag) { // 未登录
+        if (!flag) { // 未登录
             return <Redirect to="/login" />;
         } else {
             return <Layout {...props} />

@@ -7,6 +7,8 @@ import {
     Link
 } from 'react-router-dom';
 import { List, InputItem, WhiteSpace,Button } from 'antd-mobile';
+import Upload from "@/components/Upload/Upload";
+import Util from "@/util/Util";
 
 export default class Supervise extends Component {
     constructor(props) {
@@ -14,6 +16,23 @@ export default class Supervise extends Component {
         this.state={
 
         }
+    }
+
+    uploadFileOnChange(event){
+        const files = Array.from(event.target.files);
+        const formData = new FormData();
+        formData.append("files", files[0]);
+        xhr.post("/file/upload", formData, {
+            headers: {"Content-Type": "multipart/form-data"}
+        }).then((data) => {
+            console.log(data);
+            if (data.code === "1") {
+
+            }else{
+                Util.showToast(data.message);
+            }
+        });
+
     }
 
     render(){
@@ -44,10 +63,11 @@ export default class Supervise extends Component {
                             <div className="pics">
 
                             </div>
-                            <div className="pic-upload">
-                                <label className="tips">上传图片</label>
-                                <img src={require("../../assets/images/upload.png")} className="upload-button"/>
-                            </div>
+                            {/*<div className="pic-upload">*/}
+                                {/*<label className="tips">上传图片</label>*/}
+                                {/*<img src={require("../../assets/images/upload.png")} className="upload-button"/>*/}
+                            {/*</div>*/}
+                            <Upload onChange={()=>this.uploadFileOnChange(event)}/>
                         </div>
                     </div>
 
